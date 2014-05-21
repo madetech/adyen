@@ -2,12 +2,12 @@
 require 'api/spec_helper'
 
 module APISpecHelper
-  class SOAPClient < Adyen::API::SimpleSOAPClient
+  class SOAPClient < Adyen::SOAP::SimpleSOAPClient
     ENDPOINT_URI = 'https://%s.example.com/soap/Action'
   end
 end
 
-describe Adyen::API::SimpleSOAPClient do
+describe Adyen::SOAP::SimpleSOAPClient do
   include APISpecHelper
 
   before do
@@ -32,7 +32,7 @@ describe Adyen::API::SimpleSOAPClient do
   describe "call_webservice_action" do
     before do
       stub_net_http(AUTHORISE_RESPONSE)
-      @response = @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::API::Response)
+      @response = @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::SOAP::Response)
       @request, @post = Net::HTTP.posted
     end
 
@@ -52,12 +52,12 @@ describe Adyen::API::SimpleSOAPClient do
     end
 
     it "verifies certificates" do
-      File.should exist(Adyen::API::SimpleSOAPClient::CACERT)
-      @request.ca_file.should == Adyen::API::SimpleSOAPClient::CACERT
+      File.should exist(Adyen::SOAP::SimpleSOAPClient::CACERT)
+      @request.ca_file.should == Adyen::SOAP::SimpleSOAPClient::CACERT
       @request.verify_mode.should == OpenSSL::SSL::VERIFY_PEER
     end
 
-    it "uses basic-authentication with the credentials set on the Adyen::API module" do
+    it "uses basic-authentication with the credentials set on the Adyen module" do
       username, password = @post.assigned_basic_auth
       username.should == 'SuperShopper'
       password.should == 'secret'
@@ -71,8 +71,8 @@ describe Adyen::API::SimpleSOAPClient do
       )
     end
 
-    it "returns an Adyen::API::Response instance" do
-      @response.should be_instance_of(Adyen::API::Response)
+    it "returns an Adyen::SOAP::Response instance" do
+      @response.should be_instance_of(Adyen::SOAP::Response)
       @response.xml_querier.to_s.rstrip.should == AUTHORISE_RESPONSE.rstrip
     end
 
@@ -80,7 +80,7 @@ describe Adyen::API::SimpleSOAPClient do
       [
         "[401 Bad request] A client",
         Net::HTTPBadRequest.new('1.1', '401', 'Bad request'),
-        Adyen::API::SimpleSOAPClient::ClientError
+        Adyen::SOAP::SimpleSOAPClient::ClientError
       ]
     ].each do |label, response, expected_exception|
       it "raises when the HTTP response is a subclass of #{response.class.name}" do
@@ -89,7 +89,7 @@ describe Adyen::API::SimpleSOAPClient do
 
         exception = nil
         begin
-          @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::API::Response)
+          @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::SOAP::Response)
         rescue expected_exception => e
           exception = e
         end
@@ -112,8 +112,8 @@ describe Adyen::API::SimpleSOAPClient do
 
           exception = nil
           begin
-            @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::API::Response)
-          rescue Adyen::API::SimpleSOAPClient::ServerError => e
+            @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::SOAP::Response)
+          rescue Adyen::SOAP::SimpleSOAPClient::ServerError => e
             exception = e
           end
           exception.message.should ==  %{#{label} error occurred while calling SOAP action `Action' on endpoint `https://test.example.com/soap/Action'.}
@@ -125,7 +125,7 @@ describe Adyen::API::SimpleSOAPClient do
         response.stub(:body).and_return(%{<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soap:Body><soap:Fault><faultcode>soap:Server</faultcode><faultstring>Illegal argument. For input string: "100.0"</faultstring></soap:Fault></soap:Body></soap:Envelope>})
 
         lambda do
-          @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::API::Response)
+          @client.call_webservice_action('Action', '<bananas>Yes, please</bananas>', Adyen::SOAP::Response)
         end.should_not raise_error
       end
     end
