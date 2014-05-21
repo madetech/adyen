@@ -1,8 +1,8 @@
-require 'adyen/api/simple_soap_client'
-require 'adyen/api/templates/recurring_service'
+require 'adyen/soap/simple_soap_client'
+require 'adyen/soap/templates/recurring_service'
 
 module Adyen
-  module API
+  module SOAP
     # This is the class that maps actions to Adyen’s Recurring SOAP service.
     #
     # It’s encouraged to use the shortcut methods on the {API} module, which abstracts away the
@@ -13,7 +13,7 @@ module Adyen
     # that are needed for the call that you will eventually make.
     #
     # @example
-    #  recurring = Adyen::API::RecurringService.new(:shopper => { :reference => user.id })
+    #  recurring = Adyen::SOAP::RecurringService.new(:shopper => { :reference => user.id })
     #  response = recurring.disable
     #  response.success? # => true
     #

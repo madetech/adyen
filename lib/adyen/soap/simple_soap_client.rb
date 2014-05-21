@@ -1,10 +1,10 @@
 require 'net/https'
 
-require 'adyen/api/response'
-require 'adyen/api/xml_querier'
+require 'adyen/soap/response'
+require 'adyen/soap/xml_querier'
 
 module Adyen
-  module API
+  module SOAP
     # The base class of the API classes that map to Adyen SOAP services.
     class SimpleSOAPClient
       # @private
@@ -68,7 +68,7 @@ EOS
       attr_reader :params
 
       # @param [Hash] params A hash of key-value pairs required for the action that is to be called.
-      #                      These are merged with the Adyen::API.default_params.
+      #                      These are merged with the Adyen::SOAP.default_params.
       def initialize(params = {})
         @params = Adyen.configuration.default_api_params.merge(params)
       end

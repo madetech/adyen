@@ -1,4 +1,4 @@
-require 'adyen/api/xml_querier'
+require 'adyen/soap/xml_querier'
 
 module Adyen
   module Matchers
@@ -31,7 +31,7 @@ module Adyen
 
       def self.check(subject, checks = {})
         found = false
-        document = Adyen::API::XMLQuerier.html(subject)
+        document = Adyen::SOAP::XMLQuerier.html(subject)
         document.xpath(build_xpath_query(checks)) do |result|
           found = true
         end

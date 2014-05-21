@@ -1,5 +1,5 @@
 module Adyen
-  module API
+  module SOAP
     # A simple wrapper around the raw response body returned by Adyen. It abstracts away the
     # differences between REXML and Nokogiri, ensuring that this library will always work.
     #

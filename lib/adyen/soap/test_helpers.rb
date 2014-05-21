@@ -1,7 +1,7 @@
-require 'adyen/api/payment_service'
+require 'adyen/soap/payment_service'
 
 module Adyen
-  module API
+  module SOAP
     class PaymentService < SimpleSOAPClient
       # A collection of test helpers that create and assign stubbed response instances for a
       # subsequent remote call.

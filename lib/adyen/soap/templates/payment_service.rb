@@ -1,5 +1,5 @@
 module Adyen
-  module API
+  module SOAP
     class PaymentService < SimpleSOAPClient
       class << self
         private

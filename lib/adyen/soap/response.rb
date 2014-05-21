@@ -1,5 +1,5 @@
 module Adyen
-  module API
+  module SOAP
     # The base class of all responses returned by API calls to Adyen.
     class Response
       # Defines shortcut accessor methods, to {Response#params}, for the given parameters.
@@ -46,7 +46,7 @@ module Adyen
 
       # @return [Hash] Subclasses return the parsed response body.
       def params
-        raise "The Adyen::API::Response#params method should be overridden in a subclass."
+        raise "The Adyen::SOAP::Response#params method should be overridden in a subclass."
       end
 
       # @return [String,nil] The SOAP failure message, if there is one.

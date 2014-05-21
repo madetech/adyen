@@ -1,5 +1,5 @@
 module Adyen
-  module API
+  module SOAP
     class RecurringService < SimpleSOAPClient
       # @private
       LIST_LAYOUT = <<EOS

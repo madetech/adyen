@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 require 'api/spec_helper'
-require 'adyen/api/test_helpers'
+require 'adyen/soap/test_helpers'
 
 describe "Test helpers" do
   include APISpecHelper
